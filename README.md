@@ -1,5 +1,7 @@
 # Vercel Navigation Menu
 
+View live at [vercel-navigation-menu-hudson.vercel.app](https://vercel-navigation-menu-hudson.vercel.app).
+
 A TypeScript-based navigation menu implementation with SCSS styling.
 
 This is my replica of the Vercel navigation menu. It is simple, clean, and has smooth animations. This code was not copied from Vercel; I simply built it inspired by the Vercel design (plus their code wasn't good anyway).
