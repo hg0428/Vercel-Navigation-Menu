@@ -1,0 +1,256 @@
+// Import fonts
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+// Color Scheme Definitions
+$light-background-color: rgb(250, 250, 250);
+$light-highlight: rgb(235, 235, 235);
+$dark-background-color: #000;
+$dark-highlight: rgb(31, 31, 31);
+$light-text-color: #666;
+$light-text-color-bold: #171717;
+$dark-text-color: #a1a1a1;
+$dark-text-color-bold: #ededed;
+$accent-color-light: rgb(0, 122, 255);
+$accent-color-dark: rgb(10, 132, 255);
+$border-color-light: rgb(224, 224, 224);
+$border-color-dark: rgb(26, 25, 25);
+$border-color-dark-bold: rgb(46, 46, 46);
+
+:root {
+	// CSS Variables
+	--test: 10px;
+	--border-color: #{$border-color-dark};
+	--border-color-bold: #{$border-color-dark-bold};
+	--background-color: #{$dark-background-color};
+	--text-color: #{$dark-text-color};
+	--text-color-bold: #{$dark-text-color-bold};
+	--accent-color: #{$accent-color-dark};
+	--highlight-color: #{$dark-highlight};
+}
+@media (prefers-color-scheme: light) {
+	:root {
+		--border-color: #{$border-color-light};
+		--border-color-bold: #{$border-color-light};
+		--background-color: #{$light-background-color};
+		--text-color: #{$light-text-color};
+		--text-color-bold: #{$light-text-color-bold};
+		--accent-color: #{$accent-color-light};
+		--highlight-color: #{$light-highlight};
+	}
+}
+* {
+	box-sizing: border-box;
+}
+html,
+body {
+	height: 100%;
+	margin: 0;
+	font-size: 16px;
+	font-family: "Inter", sans-serif;
+	background-color: var(--background-color);
+	color: var(--text-color);
+}
+
+.shifting-dropdown-container {
+	display: flex;
+	height: 24rem;
+	width: 100%;
+	justify-content: start;
+	background-color: var(--background-color);
+	padding: 2rem;
+	color: var(--text-color);
+
+	@media (min-width: 768px) {
+		justify-content: center;
+	}
+}
+
+.shifting-dropdown {
+	position: relative;
+	display: flex;
+	height: fit-content;
+
+	.tabs-list {
+		display: flex;
+		position: relative;
+		isolation: isolate;
+
+		// Sliding background
+		.background {
+			position: absolute;
+			width: var(--tab-width, 0);
+			transform: translateX(var(--tab-left, 0));
+			height: 100%;
+			background-color: var(--highlight-color);
+			border-radius: 9999px;
+			z-index: -1;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.2s ease;
+
+			&.sliding {
+				transition: transform 0.2s ease;
+			}
+		}
+		.tab {
+			position: relative;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+			gap: 0.25rem;
+			padding: 0.5rem 0.8rem;
+			color: var(--text-color);
+			font-weight: 500;
+			font-size: 14px;
+			background: none;
+			border: none;
+			text-decoration: none;
+			cursor: pointer;
+			transition: 0.2s;
+			user-select: none;
+
+			&:hover {
+				color: var(--text-color-bold);
+			}
+
+			.chevron-down {
+				transition: transform 0.2s ease;
+				&.rotate {
+					transform: rotate(180deg);
+				}
+			}
+		}
+		// Show background when any tab is hovered or selected
+		&:has(.tab.selected) .background,
+		&:has(.tab.hover) .background {
+			opacity: 1;
+		}
+	}
+
+	// Bridge element to prevent gap
+	.dropdown-bridge {
+		position: absolute;
+		left: 0;
+		right: 0;
+		height: 24px;
+		bottom: -24px;
+		z-index: 101;
+	}
+
+	// Dropdown content styles
+	.content-container {
+		position: absolute;
+		top: calc(100% + 1rem);
+		left: 0;
+		background-color: var(--background-color);
+		border: 1px solid var(--border-color-bold);
+		border-radius: 12px;
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.2s ease, width 0.2s ease;
+		max-width: min(calc(100vw - 4rem), 800px); // Prevent overflow
+		width: var(--content-width, min-content);
+		.dropdown-viewport {
+			overflow: hidden;
+			padding: 0;
+			border-radius: 12px;
+			margin: 0;
+			max-width: min(calc(100vw - 4rem), 800px); // Prevent overflow
+			width: var(--content-width, min-content);
+			transition: opacity 0.2s ease, width 0.2s ease;
+		}
+		// Single arrow using clip-path. Using clip-path is the ONLY good way to make it look right.
+		&::before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: var(--arrow-left, 50%);
+			width: 12px;
+			height: 12px;
+			background-color: var(--background-color);
+			border: 1px solid var(--border-color-bold);
+			transform: translate(-50%, -50%) rotate(45deg);
+			clip-path: polygon(0 0, 100% 0, 50% 50%, 0 100%);
+			transition: left 0.2s ease;
+			border-radius: 3px 0;
+			z-index: 2; // Increase z-index
+		}
+
+		&.visible {
+			opacity: 1;
+			pointer-events: auto;
+		}
+		.content-wrapper {
+			display: flex;
+			position: relative;
+			transition: transform 0.2s ease;
+			width: 100%;
+			gap: 10rem;
+		}
+	}
+
+	.content-section {
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+		width: min-content;
+		max-width: min(calc(100vw - 7rem), 800px); // Account for padding
+		flex-shrink: 0; // Prevent content from shrinking
+		padding: 1.5rem;
+
+		&.visible {
+			opacity: 1;
+			visibility: visible;
+			transition: opacity 0.2s ease, visibility 0s linear;
+		}
+
+		h3 {
+			font-size: 1.25rem;
+			font-weight: 600;
+			margin-bottom: 0.75rem;
+			color: var(--text-color-bold);
+		}
+
+		p {
+			color: var(--text-color);
+			margin-bottom: 1.5rem;
+			font-size: 0.9375rem;
+		}
+
+		.features-grid,
+		.pricing-grid,
+		.articles-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 1rem;
+
+			.feature,
+			.plan,
+			article {
+				padding: 1rem;
+				background-color: rgba(var(--background-color), 0.4);
+				border-radius: 0.75rem;
+				transition: background-color 0.2s ease;
+				border: 1px solid var(--border-color);
+
+				&:hover {
+					background-color: rgba(var(--background-color), 0.6);
+				}
+
+				h4 {
+					font-size: 1rem;
+					font-weight: 500;
+					margin: 0.5rem 0;
+					color: var(--text-color-bold);
+				}
+
+				p {
+					font-size: 0.875rem;
+					margin: 0;
+					color: var(--text-color);
+				}
+			}
+		}
+	}
+}

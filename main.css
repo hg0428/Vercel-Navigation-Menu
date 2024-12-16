@@ -1,0 +1,250 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+:root {
+  --test: 10px;
+  --border-color: rgb(26, 25, 25);
+  --border-color-bold: rgb(46, 46, 46);
+  --background-color: #000;
+  --text-color: #a1a1a1;
+  --text-color-bold: #ededed;
+  --accent-color: rgb(10, 132, 255);
+  --highlight-color: rgb(31, 31, 31);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --border-color: rgb(224, 224, 224);
+    --border-color-bold: rgb(224, 224, 224);
+    --background-color: rgb(250, 250, 250);
+    --text-color: #666;
+    --text-color-bold: #171717;
+    --accent-color: rgb(0, 122, 255);
+    --highlight-color: rgb(235, 235, 235);
+  }
+}
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-size: 16px;
+  font-family: "Inter", sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.shifting-dropdown-container {
+  display: flex;
+  height: 24rem;
+  width: 100%;
+  justify-content: start;
+  background-color: var(--background-color);
+  padding: 2rem;
+  color: var(--text-color);
+}
+@media (min-width: 768px) {
+  .shifting-dropdown-container {
+    justify-content: center;
+  }
+}
+
+.shifting-dropdown {
+  position: relative;
+  display: flex;
+  height: fit-content;
+}
+.shifting-dropdown .tabs-list {
+  display: flex;
+  position: relative;
+  isolation: isolate;
+}
+.shifting-dropdown .tabs-list .background {
+  position: absolute;
+  width: var(--tab-width, 0);
+  transform: translateX(var(--tab-left, 0));
+  height: 100%;
+  background-color: var(--highlight-color);
+  border-radius: 9999px;
+  z-index: -1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.shifting-dropdown .tabs-list .background.sliding {
+  transition: transform 0.2s ease;
+}
+.shifting-dropdown .tabs-list .tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0.8rem;
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: 14px;
+  background: none;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.2s;
+  user-select: none;
+}
+.shifting-dropdown .tabs-list .tab:hover {
+  color: var(--text-color-bold);
+}
+.shifting-dropdown .tabs-list .tab .chevron-down {
+  transition: transform 0.2s ease;
+}
+.shifting-dropdown .tabs-list .tab .chevron-down.rotate {
+  transform: rotate(180deg);
+}
+.shifting-dropdown .tabs-list:has(.tab.selected) .background, .shifting-dropdown .tabs-list:has(.tab.hover) .background {
+  opacity: 1;
+}
+.shifting-dropdown .dropdown-bridge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 24px;
+  bottom: -24px;
+  z-index: 101;
+}
+.shifting-dropdown .content-container {
+  position: absolute;
+  top: calc(100% + 1rem);
+  left: 0;
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color-bold);
+  border-radius: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, width 0.2s ease;
+  max-width: min(100vw - 4rem, 800px);
+  width: var(--content-width, min-content);
+}
+.shifting-dropdown .content-container .dropdown-viewport {
+  overflow: hidden;
+  padding: 0;
+  border-radius: 12px;
+  margin: 0;
+  max-width: min(100vw - 4rem, 800px);
+  width: var(--content-width, min-content);
+  transition: opacity 0.2s ease, width 0.2s ease;
+}
+.shifting-dropdown .content-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: var(--arrow-left, 50%);
+  width: 12px;
+  height: 12px;
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color-bold);
+  transform: translate(-50%, -50%) rotate(45deg);
+  clip-path: polygon(0 0, 100% 0, 50% 50%, 0 100%);
+  transition: left 0.2s ease;
+  border-radius: 3px 0;
+  z-index: 2;
+}
+.shifting-dropdown .content-container.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.shifting-dropdown .content-container .content-wrapper {
+  display: flex;
+  position: relative;
+  transition: transform 0.2s ease;
+  width: 100%;
+  gap: 10rem;
+}
+.shifting-dropdown .content-section {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+  width: min-content;
+  max-width: min(100vw - 7rem, 800px);
+  flex-shrink: 0;
+  padding: 1.5rem;
+}
+.shifting-dropdown .content-section.visible {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.2s ease, visibility 0s linear;
+}
+.shifting-dropdown .content-section h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--text-color-bold);
+}
+.shifting-dropdown .content-section p {
+  color: var(--text-color);
+  margin-bottom: 1.5rem;
+  font-size: 0.9375rem;
+}
+.shifting-dropdown .content-section .features-grid,
+.shifting-dropdown .content-section .pricing-grid,
+.shifting-dropdown .content-section .articles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+.shifting-dropdown .content-section .features-grid .feature,
+.shifting-dropdown .content-section .features-grid .plan,
+.shifting-dropdown .content-section .features-grid article,
+.shifting-dropdown .content-section .pricing-grid .feature,
+.shifting-dropdown .content-section .pricing-grid .plan,
+.shifting-dropdown .content-section .pricing-grid article,
+.shifting-dropdown .content-section .articles-grid .feature,
+.shifting-dropdown .content-section .articles-grid .plan,
+.shifting-dropdown .content-section .articles-grid article {
+  padding: 1rem;
+  background-color: rgba(var(--background-color), 0.4);
+  border-radius: 0.75rem;
+  transition: background-color 0.2s ease;
+  border: 1px solid var(--border-color);
+}
+.shifting-dropdown .content-section .features-grid .feature:hover,
+.shifting-dropdown .content-section .features-grid .plan:hover,
+.shifting-dropdown .content-section .features-grid article:hover,
+.shifting-dropdown .content-section .pricing-grid .feature:hover,
+.shifting-dropdown .content-section .pricing-grid .plan:hover,
+.shifting-dropdown .content-section .pricing-grid article:hover,
+.shifting-dropdown .content-section .articles-grid .feature:hover,
+.shifting-dropdown .content-section .articles-grid .plan:hover,
+.shifting-dropdown .content-section .articles-grid article:hover {
+  background-color: rgba(var(--background-color), 0.6);
+}
+.shifting-dropdown .content-section .features-grid .feature h4,
+.shifting-dropdown .content-section .features-grid .plan h4,
+.shifting-dropdown .content-section .features-grid article h4,
+.shifting-dropdown .content-section .pricing-grid .feature h4,
+.shifting-dropdown .content-section .pricing-grid .plan h4,
+.shifting-dropdown .content-section .pricing-grid article h4,
+.shifting-dropdown .content-section .articles-grid .feature h4,
+.shifting-dropdown .content-section .articles-grid .plan h4,
+.shifting-dropdown .content-section .articles-grid article h4 {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0.5rem 0;
+  color: var(--text-color-bold);
+}
+.shifting-dropdown .content-section .features-grid .feature p,
+.shifting-dropdown .content-section .features-grid .plan p,
+.shifting-dropdown .content-section .features-grid article p,
+.shifting-dropdown .content-section .pricing-grid .feature p,
+.shifting-dropdown .content-section .pricing-grid .plan p,
+.shifting-dropdown .content-section .pricing-grid article p,
+.shifting-dropdown .content-section .articles-grid .feature p,
+.shifting-dropdown .content-section .articles-grid .plan p,
+.shifting-dropdown .content-section .articles-grid article p {
+  font-size: 0.875rem;
+  margin: 0;
+  color: var(--text-color);
+}
+
+/*# sourceMappingURL=main.css.map */
