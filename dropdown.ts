@@ -34,8 +34,10 @@ window.addEventListener("load", (event: Event) => {
 			if (currentSelected) {
 				currentSelected.classList.remove("selected", "hover");
 				background.classList.add("sliding");
+				dropdownContainer.classList.add("sliding");
 			} else {
 				background.classList.remove("sliding");
+				dropdownContainer.classList.remove("sliding");
 			}
 
 			tabsList.style.setProperty("--tab-left", `${left}px`);
