@@ -37,11 +37,10 @@ body {
 
 .shifting-dropdown-container {
   display: flex;
-  height: 24rem;
   width: 100%;
   justify-content: start;
   background-color: var(--background-color);
-  padding: 2rem;
+  padding: 0.5rem 1rem;
   color: var(--text-color);
 }
 @media (min-width: 768px) {
@@ -70,10 +69,10 @@ body {
   z-index: -1;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.3s ease;
 }
 .shifting-dropdown .tabs-list .background.sliding {
-  transition: transform 0.2s ease;
+  transition: transform 0.3s ease;
 }
 .shifting-dropdown .tabs-list .tab {
   position: relative;
@@ -85,19 +84,19 @@ body {
   padding: 0.5rem 0.8rem;
   color: var(--text-color);
   font-weight: 500;
-  font-size: 14px;
+  font-size: 0.875rem;
   background: none;
   border: none;
   text-decoration: none;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.3s;
   user-select: none;
 }
 .shifting-dropdown .tabs-list .tab:hover {
   color: var(--text-color-bold);
 }
 .shifting-dropdown .tabs-list .tab .chevron-down {
-  transition: transform 0.2s ease;
+  transition: transform 0.3s ease;
 }
 .shifting-dropdown .tabs-list .tab .chevron-down.rotate {
   transform: rotate(180deg);
@@ -122,9 +121,21 @@ body {
   border-radius: 12px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease, width 0.2s ease;
+  transition: opacity 0.3s ease;
   max-width: min(100vw - 4rem, 800px);
   width: var(--content-width, min-content);
+}
+.shifting-dropdown .content-container.sliding {
+  transition: width 0.3s ease;
+}
+.shifting-dropdown .content-container.sliding .dropdown-viewport {
+  transition: width 0.3s ease;
+}
+.shifting-dropdown .content-container.sliding .content-wrapper {
+  transition: transform 0.3s ease;
+}
+.shifting-dropdown .content-container.sliding::before {
+  transition: left 0.3s ease;
 }
 .shifting-dropdown .content-container .dropdown-viewport {
   overflow: hidden;
@@ -133,7 +144,10 @@ body {
   margin: 0;
   max-width: min(100vw - 4rem, 800px);
   width: var(--content-width, min-content);
-  transition: opacity 0.2s ease, width 0.2s ease;
+  transition: opacity 0.3s ease;
+}
+.shifting-dropdown .content-container .dropdown-viewport.sliding {
+  transition: width 0.3s ease;
 }
 .shifting-dropdown .content-container::before {
   content: "";
@@ -146,7 +160,6 @@ body {
   border: 1px solid var(--border-color-bold);
   transform: translate(-50%, -50%) rotate(45deg);
   clip-path: polygon(0 0, 100% 0, 50% 50%, 0 100%);
-  transition: left 0.2s ease;
   border-radius: 3px 0;
   z-index: 2;
 }
@@ -157,14 +170,13 @@ body {
 .shifting-dropdown .content-container .content-wrapper {
   display: flex;
   position: relative;
-  transition: transform 0.2s ease;
   width: 100%;
   gap: 10rem;
 }
 .shifting-dropdown .content-section {
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
   width: min-content;
   max-width: min(100vw - 7rem, 800px);
   flex-shrink: 0;
@@ -173,7 +185,7 @@ body {
 .shifting-dropdown .content-section.visible {
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.2s ease, visibility 0s linear;
+  transition: opacity 0.3s ease, visibility 0s linear;
 }
 .shifting-dropdown .content-section h3 {
   font-size: 1.25rem;
@@ -205,7 +217,7 @@ body {
   padding: 1rem;
   background-color: rgba(var(--background-color), 0.4);
   border-radius: 0.75rem;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.3s ease;
   border: 1px solid var(--border-color);
 }
 .shifting-dropdown .content-section .features-grid .feature:hover,
